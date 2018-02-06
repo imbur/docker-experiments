@@ -10,8 +10,7 @@ cache:
   - docker
 
 before_install:
-- if [[ -e docker/texbuilder.tar.gz  ]] ; then gzip -dc docker/texbuilder.tar.gz | docker load ; else docker pull makisyu/texlive-2016 ; fi
-- docker save makisyu/texlive-2016 | gzip > docker/texbuilder.tar.gz
+- if [[ -e docker/texbuilder.tar.gz  ]] ; then gzip -dc docker/texbuilder.tar.gz | docker load ; else docker pull makisyu/texlive-2016 ;  docker save makisyu/texlive-2016 | gzip > docker/texbuilder.tar.gz ; fi
 
 script:
 - docker run -d --name texbuilder -v `pwd`/:/mnt/ makisyu/texlive-2016 /bin/bash -c "sleep 10"
