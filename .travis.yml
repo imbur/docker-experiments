@@ -5,11 +5,17 @@ language: bash
 services:
   - docker
 
+cache:
+  directories:
+  - docker
+
 before_install:
-- docker pull makisyu/texlive-2016
+- if [[ -e docker/texbuilder.tar.gz  ]] ; then gzip -dc docker/texbuilder.tar.gz | docker load ; else docker pull makisyu/texlive-2016 ; fi
+- docker save makisyu/texlive-2016 | gzip > docker/texbuilder.tar.gz
+
+script:
 - docker run -d --name texbuilder -v `pwd`/:/mnt/ makisyu/texlive-2016 /bin/bash -c "sleep 10"
 - docker ps -a
 - docker exec -ti texbuilder /bin/bash -c "cd /mnt && pdflatex /mnt/calendar_1.tex"
-
-script:
 - ls -la
+
