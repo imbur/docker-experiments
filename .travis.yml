@@ -4,3 +4,12 @@ language: bash
 
 services:
   - docker
+
+before_install:
+- docker pull makisyu/texlive-2016
+- docker run -d --name texbuilder -v `pwd`/:/mnt/ makisyu/texlive-2016 /bin/bash -c "sleep 10"
+- docker ps -a
+- docker exec -ti texbuilder /bin/bash -c "cd /mnt && pdflatex /mnt/calendar_1.tex"
+
+script:
+- ls -la
